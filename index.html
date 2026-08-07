@@ -150,7 +150,29 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .hero p{ margin:20px auto 0; font-size:clamp(16px,2.4vw,21px); color:var(--txt-2); max-width:34ch; line-height:1.55 }
-.hero__cta{ display:flex; flex-wrap:wrap; gap:11px; justify-content:center; margin-top:34px }
+
+/* 썸네일 진입 카드 */
+.hero__cards{
+  display:grid; gap:14px; margin:34px auto 0; text-align:left;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));
+}
+.hcard{
+  display:block; border-radius:var(--r); overflow:hidden; background:#fff;
+  border:1px solid var(--sep); box-shadow:var(--shadow-lg);
+  transition:transform .28s var(--ease), box-shadow .3s var(--ease);
+}
+.hcard:hover{ transform:translateY(-4px) }
+.hcard:active{ transform:scale(.982) }
+.hcard img{ width:100%; height:auto; display:block }
+.hcard__b{
+  display:flex; align-items:center; gap:10px; padding:13px 16px; color:#fff;
+  font-size:15px; font-weight:620; letter-spacing:-.018em;
+}
+.hcard--1 .hcard__b{ background:linear-gradient(100deg,var(--t1a),var(--t1b)) }
+.hcard--2 .hcard__b{ background:linear-gradient(100deg,var(--t2a),var(--t2b)) }
+.hcard__b b{ font-size:11.5px; font-weight:800; letter-spacing:.1em; opacity:.85 }
+.hcard__b i{ margin-left:auto; font-style:normal; font-size:14px; opacity:.9; transition:transform .25s var(--ease) }
+.hcard:hover .hcard__b i{ transform:translateX(4px) }
 
 .btn{
   display:inline-flex; align-items:center; gap:8px; min-height:46px;
@@ -159,8 +181,6 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
   will-change:transform;
 }
 .btn:active{ transform:scale(.955) }
-.btn--1{ color:#fff; background:linear-gradient(135deg,var(--t1a),var(--t1b)); box-shadow:0 6px 20px color-mix(in srgb, var(--t1a) 34%, transparent) }
-.btn--2{ color:#fff; background:linear-gradient(135deg,var(--t2a),var(--t2b)); box-shadow:0 6px 20px color-mix(in srgb, var(--t2a) 34%, transparent) }
 .btn--ghost{ background:var(--card-solid); color:var(--txt); box-shadow:var(--shadow) }
 
 .scrollhint{
@@ -206,25 +226,29 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 }
 @media (max-width:720px){ .flow__arrow{ width:100%; text-align:center; transform:rotate(90deg); padding:2px 0 } }
 
-/* ============ Table section header ============ */
-.tbl{ padding-top:clamp(54px,9vw,110px) }
-.tbl__banner{
-  border-radius:var(--r); overflow:hidden; background:#fff;
-  box-shadow:var(--shadow-lg); border:1px solid var(--sep); margin-bottom:26px;
+/* ============ Table section header (배너를 배경으로 깔기) ============ */
+.tbl{ padding-top:0 }
+.tbl__hd{ position:relative; overflow:hidden; margin-bottom:clamp(6px,1.6vw,18px) }
+.tbl__hd img{ width:100%; height:auto; display:block }
+@media (min-width:820px){
+  .tbl__hd{ height:min(40vh,330px) }
+  .tbl__hd img{ height:100%; object-fit:cover; object-position:center 46% }
 }
-.tbl__banner img{ width:100%; height:auto }
-.tags{ display:flex; flex-wrap:wrap; gap:7px; margin:0 0 18px }
-.tag{
-  font-size:13px; font-weight:600; letter-spacing:-.01em; padding:5px 12px; border-radius:99px;
-  border:1px solid transparent;
+/* 아래쪽을 페이지 배경으로 녹여 배너가 '깔린' 느낌 */
+.tbl__hd::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to bottom,
+    transparent 52%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 78%,
+    color-mix(in srgb, var(--bg) 92%, transparent) 93%,
+    var(--bg) 100%);
 }
-.t1 .tag{ color:var(--t1a); background:color-mix(in srgb, var(--t1a) 11%, transparent); border-color:color-mix(in srgb, var(--t1a) 22%, transparent) }
-.t2 .tag{ color:var(--t2a); background:color-mix(in srgb, var(--t2a) 11%, transparent); border-color:color-mix(in srgb, var(--t2a) 22%, transparent) }
-
-.rule{ height:1px; background:var(--sep); border:0; margin:clamp(34px,5vw,58px) 0 }
+.sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
 
 .sub{ margin:clamp(30px,4.4vw,48px) 0 16px }
+.sub--first{ margin-top:clamp(8px,1.8vw,20px) }
 .sub__k{ font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--txt-3); margin:0 0 5px }
+.sub--first .sub__k{ text-transform:none; letter-spacing:.01em; font-size:12.5px }
 
 /* ============ Link cards ============ */
 .links{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)) }
@@ -272,43 +296,34 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 .poster__cap b{ display:block; font-size:14.5px; font-weight:620; letter-spacing:-.018em; line-height:1.35 }
 .poster__cap span{ display:block; font-size:12.5px; color:var(--txt-3); margin-top:2px; line-height:1.4 }
 
-/* ============ Feature list ============ */
-.feats{ display:grid; gap:10px }
-.feat{
-  display:flex; gap:14px; align-items:flex-start; padding:16px 18px;
-  background:var(--card); border:1px solid var(--sep); border-radius:18px;
+/* ============ Compact steps ============ */
+.lane{
+  display:flex; align-items:center; gap:9px; margin:22px 0 10px;
+  font-size:14px; font-weight:650; letter-spacing:-.015em; color:var(--txt-2);
 }
-.feat__ico{ flex:0 0 auto; font-size:20px; line-height:1.4 }
-.feat b{ display:block; font-size:15.5px; font-weight:620; letter-spacing:-.018em }
-.feat span{ display:block; font-size:14.5px; color:var(--txt-2); margin-top:2px; line-height:1.55 }
-
-/* ============ Steps ============ */
-.steps{ display:grid; gap:0; counter-reset:s }
-.step{
-  display:grid; grid-template-columns:34px 1fr; gap:16px; padding:0 0 22px; position:relative;
+.lane::after{ content:""; flex:1 1 auto; height:1px; background:var(--sep) }
+.sgrid{ display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)) }
+@media (max-width:600px){ .sgrid{ grid-template-columns:repeat(2,1fr); gap:9px } }
+.sitem{
+  padding:14px 15px; border-radius:16px;
+  background:var(--card); border:1px solid var(--sep);
 }
-.step::before{
-  counter-increment:s; content:counter(s);
-  grid-row:1; grid-column:1; width:30px; height:30px; border-radius:50%;
-  display:grid; place-items:center; font-size:13px; font-weight:700; color:#fff;
-  background:linear-gradient(140deg,var(--t2a),var(--t2b)); box-shadow:0 3px 10px color-mix(in srgb,var(--t2a) 30%,transparent);
-  position:relative; z-index:1;
+.sitem i{
+  display:grid; place-items:center; width:22px; height:22px; border-radius:50%;
+  font-style:normal; font-size:11.5px; font-weight:700; color:#fff; margin-bottom:9px;
+  background:linear-gradient(140deg,var(--t2a),var(--t2b));
+  box-shadow:0 3px 9px color-mix(in srgb,var(--t2a) 28%,transparent);
 }
-.step::after{
-  content:""; position:absolute; left:15px; top:32px; bottom:2px; width:1.5px;
-  background:linear-gradient(var(--sep-2), var(--sep)); border-radius:2px;
-}
-.step:last-child{ padding-bottom:0 }
-.step:last-child::after{ display:none }
-.step__tx{ padding-top:2px }
-.step__tx b{ display:block; font-size:16px; font-weight:640; letter-spacing:-.02em }
-.step__tx p{ margin:3px 0 0; font-size:15px; color:var(--txt-2); line-height:1.58 }
+.sitem b{ display:block; font-size:15px; font-weight:640; letter-spacing:-.02em; line-height:1.3 }
+.sitem span{ display:block; font-size:13px; color:var(--txt-3); margin-top:3px; line-height:1.45 }
 
 .quote{
   display:inline-block; margin-top:8px; font-size:14px; color:var(--txt-2);
   background:var(--sep); border-radius:12px; padding:8px 13px; line-height:1.5;
   border-left:2.5px solid var(--t2a);
 }
+.quote--wide{ display:block; margin-top:12px }
+.quote--wide b{ font-weight:700; color:var(--txt-3); font-size:12px; letter-spacing:.04em; margin-right:6px }
 
 /* ============ Warning ============ */
 .warn{
@@ -393,7 +408,7 @@ body.lock{ overflow:hidden }
 
 /* ============ Print ============ */
 @media print{
-  .nav,.sfx,.scrollhint,.hero__cta,.lb{ display:none !important }
+  .nav,.sfx,.scrollhint,.lb{ display:none !important }
   body{ background:#fff; color:#000; font-size:11pt }
   .rv{ opacity:1; transform:none }
   .card,.link,.poster,.feat,.dev{ break-inside:avoid; box-shadow:none; border:1px solid #ddd; background:#fff }
@@ -420,9 +435,15 @@ body.lock{ overflow:hidden }
     <div class="hero__badge">2026 경북 초등 수업나눔축제</div>
     <h1>수학도 놀이다!<br><em>AI 활용 수학 놀이터</em></h1>
     <p>초등수학교육교사연구회 <strong>“수다방”</strong><br>교실에서 바로 쓰는 융합 수업 체험</p>
-    <div class="hero__cta">
-      <a class="btn btn--1" href="#table1" data-sfx="tap">🕹️ 수학&amp;코딩체험존</a>
-      <a class="btn btn--2" href="#table2" data-sfx="tap">📚 수학&amp;동화제작소</a>
+    <div class="hero__cards">
+      <a class="hcard hcard--1" href="#table1" data-sfx="tap">
+        <img src="img/hero-table1.jpg" alt="수학&코딩체험존" width="1600" height="900">
+        <span class="hcard__b"><b>TABLE 1</b>수학&amp;코딩체험존<i>→</i></span>
+      </a>
+      <a class="hcard hcard--2" href="#table2" data-sfx="tap">
+        <img src="img/hero-table2.jpg" alt="수학&동화제작소" width="1600" height="900">
+        <span class="hcard__b"><b>TABLE 2</b>수학&amp;동화제작소<i>→</i></span>
+      </a>
     </div>
     <div class="scrollhint"><span>아래로 스크롤</span><i></i></div>
   </div>
@@ -485,22 +506,42 @@ body.lock{ overflow:hidden }
 
 <!-- ══════════ 테이블 1 ══════════ -->
 <section class="sec tbl t1" id="table1">
+  <div class="tbl__hd">
+    <img src="img/hero-table1.jpg" alt="수학&코딩체험존 — #바이브코딩 #제미나이 캔버스 #수학올림픽" loading="lazy" width="1600" height="900">
+    <h2 class="sr">수학&amp;코딩체험존</h2>
+  </div>
   <div class="wrap">
-    <div class="tbl__banner rv"><img src="img/hero-table1.jpg" alt="수학&코딩체험존 배너" loading="lazy" width="1600" height="900"></div>
-
-    <p class="eyebrow rv">Table 1</p>
-    <h2 class="rv">수학&amp;코딩체험존</h2>
-    <div class="tags rv">
-      <span class="tag">#바이브코딩</span>
-      <span class="tag">#제미나이 캔버스</span>
-      <span class="tag">#수학올림픽</span>
+    <div class="sub sub--first rv">
+      <p class="sub__k">Table 1 · 수학&amp;코딩체험존</p>
+      <h3>활동 한눈에</h3>
+      <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 안내판을 전체 화면으로 볼 수 있습니다.</p>
     </div>
-    <p class="lede rv">모니터로 안내 영상을 보고, 태블릿·랩탑·스마트폰으로 수학 웹앱을 직접 플레이하는 코너입니다.</p>
+    <div class="posters rv">
+      <button class="poster" data-src="img/zone-overview.jpg" data-cap="수학&코딩체험존 — 부스 전체 안내" data-sfx="open">
+        <span class="poster__img"><img src="img/zone-overview.jpg" alt="수학&코딩체험존 전체 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>체험존 전체 안내</b><span>바이브코딩 · 제미나이 캔버스</span></span>
+      </button>
+      <button class="poster" data-src="img/zone-olympics.jpg" data-cap="수학 올림픽 — 조작 방식 선택 → 종목 선택" data-sfx="open">
+        <span class="poster__img"><img src="img/zone-olympics.jpg" alt="수학 올림픽 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>수학 올림픽</b><span>모션인식 신체활동</span></span>
+      </button>
+      <button class="poster" data-src="img/zone-playground.jpg" data-cap="수학 놀이터 — 수학 산성비 · 시크릿 넘버 · 마법사의 방" data-sfx="open">
+        <span class="poster__img"><img src="img/zone-playground.jpg" alt="수학 놀이터 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>수학 놀이터</b><span>산성비 · 시크릿 넘버 · 마법사의 방</span></span>
+      </button>
+      <button class="poster" data-src="img/zone-sns.jpg" data-cap="수학 웹앱 SNS — 매쓰 카페와 인터랙티브 학습 플랫폼" data-sfx="open">
+        <span class="poster__img"><img src="img/zone-sns.jpg" alt="수학 웹앱 SNS 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>수학 웹앱 SNS</b><span>매쓰 카페 · 소셜 학습</span></span>
+      </button>
+      <button class="poster" data-src="img/zone-grades.jpg" data-cap="학년 및 단원별 수학 놀이 — 1~6학년 전 단원" data-sfx="open">
+        <span class="poster__img"><img src="img/zone-grades.jpg" alt="학년 및 단원별 수학 놀이 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>학년·단원별 수학 놀이</b><span>1~6학년 전 단원</span></span>
+      </button>
+    </div>
 
     <div class="sub rv">
       <p class="sub__k">Play now</p>
-      <h3>체험용 웹앱 바로가기</h3>
-      <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 새 창에서 바로 실행됩니다.</p>
+      <h3>바로 체험하기</h3>
     </div>
     <div class="links rv">
       <a class="link" href="https://Suda11.netlify.app" target="_blank" rel="noopener" data-sfx="link">
@@ -529,91 +570,75 @@ body.lock{ overflow:hidden }
         <span class="link__arw">↗</span>
       </a>
     </div>
-
-    <div class="sub rv">
-      <p class="sub__k">Hands-on</p>
-      <h3>체험 코너</h3>
-    </div>
-    <div class="feats rv">
-      <div class="feat">
-        <span class="feat__ico">🧩</span>
-        <div><b>바이브코딩 &amp; 제미나이 캔버스</b>
-        <span>보드판 · 키워드 카드 · 마커로 코딩 아이디어를 구성하고, 거치대에 올린 스마트폰으로 제미나이 캔버스에 업로드해 결과를 확인합니다.</span></div>
-      </div>
-      <div class="feat">
-        <span class="feat__ico">🤸</span>
-        <div><b>모션인식 &amp; 신체활동 — 수학 올림픽</b>
-        <span>카메라로 몸을 움직여 캐릭터를 조작합니다. <strong>모션 인식 · 터치 모드 · 마우스 모드</strong> 중 선택 가능. 종목: 네자리수 스파이크, 구구단 클레이 사격.</span></div>
-      </div>
-      <div class="feat">
-        <span class="feat__ico">📐</span>
-        <div><b>수학 놀이터</b>
-        <span>수학 산성비(혼합 계산) · 시크릿 넘버(약수와 배수 추리) · 마법사의 방(규칙 찾기 방탈출).</span></div>
-      </div>
-      <div class="feat">
-        <span class="feat__ico">💬</span>
-        <div><b>수학 웹앱 SNS</b>
-        <span>매쓰 카페 커뮤니티, 인터랙티브 소셜 학습 플랫폼. 구구단 마스터 &amp; 수학 마리오, 사각형 성질 탐구 시뮬레이터 체험.</span></div>
-      </div>
-      <div class="feat">
-        <span class="feat__ico">🎒</span>
-        <div><b>학년 및 단원별 수학 놀이</b>
-        <span>1~6학년 전 학년, 단원별 핵심 개념을 시각적인 게임 인터페이스로 체험합니다.</span></div>
-      </div>
-    </div>
-
-    <div class="sub rv">
-      <p class="sub__k">Guide</p>
-      <h3>안내판 &amp; 인포그래픽</h3>
-      <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 전체 화면으로 크게 볼 수 있습니다.</p>
-    </div>
-    <div class="posters rv">
-      <button class="poster" data-src="img/zone-overview.jpg" data-cap="수학&코딩체험존 — 부스 전체 안내 배너" data-sfx="open">
-        <span class="poster__img"><img src="img/zone-overview.jpg" alt="수학&코딩체험존 전체 안내 배너" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>체험존 안내 배너</b><span>테이블 1 전체 구성</span></span>
-      </button>
-      <button class="poster" data-src="img/zone-olympics.jpg" data-cap="수학 올림픽 — 조작 방식 선택 → 종목 선택" data-sfx="open">
-        <span class="poster__img"><img src="img/zone-olympics.jpg" alt="수학 올림픽 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>수학 올림픽</b><span>모션·터치·마우스 / 2종목</span></span>
-      </button>
-      <button class="poster" data-src="img/zone-playground.jpg" data-cap="수학 놀이터 — 수학 산성비 · 시크릿 넘버 · 마법사의 방" data-sfx="open">
-        <span class="poster__img"><img src="img/zone-playground.jpg" alt="수학 놀이터 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>수학 놀이터</b><span>산성비 · 시크릿 넘버 · 마법사의 방</span></span>
-      </button>
-      <button class="poster" data-src="img/zone-sns.jpg" data-cap="수학 웹앱 SNS — 매쓰 카페와 인터랙티브 학습 플랫폼" data-sfx="open">
-        <span class="poster__img"><img src="img/zone-sns.jpg" alt="수학 웹앱 SNS 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>수학 웹앱 SNS</b><span>매쓰 카페 · 소셜 학습</span></span>
-      </button>
-      <button class="poster" data-src="img/zone-grades.jpg" data-cap="학년 및 단원별 수학 놀이 — 1~6학년 전 단원" data-sfx="open">
-        <span class="poster__img"><img src="img/zone-grades.jpg" alt="학년 및 단원별 수학 놀이 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>학년·단원별 수학 놀이</b><span>1~6학년 전 단원</span></span>
-      </button>
-    </div>
   </div>
 </section>
 
 <!-- ══════════ 테이블 2 ══════════ -->
 <section class="sec tbl t2" id="table2">
+  <div class="tbl__hd">
+    <img src="img/hero-table2.jpg" alt="수학&동화제작소 — #수학동화 #제미나이 노트북 #캐릭터 생성" loading="lazy" width="1600" height="900">
+    <h2 class="sr">수학&amp;동화제작소</h2>
+  </div>
   <div class="wrap">
-    <hr class="rule">
-    <div class="tbl__banner rv"><img src="img/hero-table2.jpg" alt="수학&동화제작소 배너" loading="lazy" width="1600" height="900"></div>
-
-    <p class="eyebrow rv">Table 2</p>
-    <h2 class="rv">수학&amp;동화제작소</h2>
-    <div class="tags rv">
-      <span class="tag">#수학동화</span>
-      <span class="tag">#제미나이 노트북</span>
-      <span class="tag">#캐릭터 생성</span>
+    <div class="sub sub--first rv">
+      <p class="sub__k">Table 2 · 수학&amp;동화제작소</p>
+      <h3>활동 한눈에</h3>
+      <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 안내판을 전체 화면으로 볼 수 있습니다.</p>
     </div>
-    <p class="lede rv">AI로 우리 반 친구 같은 캐릭터를 만들고, 좋아하는 세계관에 수학 단원을 얹어 나만의 수학 동화를 완성합니다.</p>
+    <div class="posters rv">
+      <button class="poster" data-src="img/studio-overview.jpg" data-cap="수학&동화제작소 — 부스 전체 안내" data-sfx="open">
+        <span class="poster__img"><img src="img/studio-overview.jpg" alt="수학&동화제작소 전체 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>제작소 전체 안내</b><span>수학 동화 만들기 4단계</span></span>
+      </button>
+      <button class="poster" data-src="img/studio-pc.jpg" data-cap="PC 버전 체험 — Step 1 소스 모으기 → Step 2 프롬프트 입력" data-sfx="open">
+        <span class="poster__img"><img src="img/studio-pc.jpg" alt="PC 버전 체험 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>PC 버전 체험</b><span>AI 캐릭터 · 세계관 · 프롬프트</span></span>
+      </button>
+      <button class="poster" data-src="img/studio-mobile.jpg" data-cap="스마트폰 버전 체험 — Gemini Notebook 6단계" data-sfx="open">
+        <span class="poster__img"><img src="img/studio-mobile.jpg" alt="스마트폰 버전 체험 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
+        <span class="poster__cap"><b>스마트폰 버전 체험</b><span>Gemini Notebook 6단계</span></span>
+      </button>
+    </div>
 
     <div class="sub rv">
-      <p class="sub__k">Exhibition</p>
-      <h3>전시 코너</h3>
+      <p class="sub__k">How to</p>
+      <h3>제작 순서</h3>
     </div>
-    <div class="feats rv" style="margin-bottom:12px">
-      <div class="feat"><span class="feat__ico">🖼️</span><div><b>전시물</b>
-        <span>수학 동화 만들기 4단계 인포그래픽 · AI로 만든 학생 캐릭터 예시 · 슬라이드 예시 출력물(마리오, 마인크래프트 테마 등)</span></div></div>
+
+    <p class="lane rv">💻 PC 버전</p>
+    <div class="sgrid rv">
+      <div class="sitem"><i>1</i><b>소스 모으기</b><span>AI 캐릭터 + 세계관·단원 설정</span></div>
+      <div class="sitem"><i>2</i><b>프롬프트 입력</b><span>동화 제작 지시</span></div>
+    </div>
+
+    <p class="lane rv">📱 스마트폰 버전 · Gemini Notebook</p>
+    <div class="sgrid rv">
+      <div class="sitem"><i>1</i><b>앱 설치</b><span>Gemini Notebook</span></div>
+      <div class="sitem"><i>2</i><b>새 노트북</b><span>+ 새 만들기(New)</span></div>
+      <div class="sitem"><i>3</i><b>소스 추가</b><span>PDF · 이미지 · 웹 · 유튜브</span></div>
+      <div class="sitem"><i>4</i><b>소스 정제</b><span>핵심 자료만 선택</span></div>
+      <div class="sitem"><i>5</i><b>지시 입력</b><span>원하는 결과를 구체적으로</span></div>
+      <div class="sitem"><i>6</i><b>스튜디오</b><span>슬라이드(Slide)로 완성</span></div>
+    </div>
+    <p class="quote quote--wide rv"><b>프롬프트 예시</b> “초등 2학년 곱셈 단원 슈퍼마리오 수학 동화 슬라이드 제작”</p>
+
+    <div class="sub rv">
+      <p class="sub__k">Devices</p>
+      <h3>기기</h3>
+    </div>
+    <div class="devs rv">
+      <div class="dev dev--main"><span class="pill">MAIN</span><b>📱 개인 스마트폰</b><span>기본 권장</span></div>
+      <div class="dev"><span class="pill">SUB</span><b>💻 대여용 태블릿 · 노트북</b><span>부스에서 대여</span></div>
+    </div>
+    <div class="warn rv">
+      <span style="font-size:19px;line-height:1.3">⚠️</span>
+      <div><b>노트북(PC 버전) 유의사항</b>
+      <p>무료 사용 한도 — <strong>3회 체험 후 계정 전환</strong></p></div>
+    </div>
+
+    <div class="sub rv">
+      <p class="sub__k">Materials</p>
+      <h3>자료 바로가기</h3>
     </div>
     <div class="links rv">
       <a class="link" href="https://drive.google.com/drive/folders/1bU9qbx4ymnfs-NqPjFu6iB1A3t8jz-LW?usp=sharing" target="_blank" rel="noopener" data-sfx="link">
@@ -626,82 +651,6 @@ body.lock{ overflow:hidden }
         <span class="link__tx"><b>수학동화 제작 체험 안내 영상</b><span>YouTube</span></span>
         <span class="link__arw">↗</span>
       </a>
-    </div>
-
-    <div class="sub rv">
-      <p class="sub__k">Devices</p>
-      <h3>기기 운영 방법</h3>
-    </div>
-    <div class="devs rv">
-      <div class="dev dev--main">
-        <span class="pill">MAIN</span>
-        <b>📱 개인 스마트폰</b>
-        <span>기본 권장. 앱 설치 후 바로 체험할 수 있어 가장 빠릅니다.</span>
-      </div>
-      <div class="dev">
-        <span class="pill">SUB</span>
-        <b>💻 대여용 태블릿 / 노트북</b>
-        <span>스마트폰 사용이 어려운 경우 부스에서 대여합니다.</span>
-      </div>
-    </div>
-    <div class="warn rv">
-      <span style="font-size:19px;line-height:1.3">⚠️</span>
-      <div><b>노트북(PC 버전) 사용 시 유의사항</b>
-      <p>무료 사용 한도로 인해 <strong>3회 체험 후 계정을 전환(교체)</strong>해주어야 합니다.</p></div>
-    </div>
-
-    <div class="sub rv">
-      <p class="sub__k">PC version</p>
-      <h3>PC 버전 체험</h3>
-    </div>
-    <div class="grid grid--2 rv">
-      <div class="card">
-        <span class="card__ico">🧱</span>
-        <h4>Step 1. 소스 모으기 — 동화의 뼈대 만들기</h4>
-        <ul>
-          <li><strong>AI로 만드는 나만의 캐릭터</strong> — Gemini로 우리 반 친구 같은 캐릭터 이미지 생성</li>
-          <li><strong>수학 단원과 세계관 설정</strong> — 마리오 월드, 마인크래프트 등 좋아하는 배경 + 학습할 수학 단원 결합</li>
-        </ul>
-      </div>
-      <div class="card">
-        <span class="card__ico">⌨️</span>
-        <h4>Step 2. 프롬프트 입력 — 수학 동화의 완성</h4>
-        <p>설정한 캐릭터와 배경 소스를 바탕으로 AI에게 제작 프롬프트를 입력합니다.</p>
-        <p class="quote">“초등 1학년 2학기 세자리수 슬라이드 제작 — 귀여운, 흰색 배경, 초등스러운 슈퍼마리오 수학만화로 제작”</p>
-      </div>
-    </div>
-
-    <div class="sub rv">
-      <p class="sub__k">Mobile version</p>
-      <h3>스마트폰 버전 체험</h3>
-    </div>
-    <div class="steps rv">
-      <div class="step"><div class="step__tx"><b>설치 및 앱 실행</b><p>앱스토어 / 플레이스토어에서 <strong>Gemini Notebook</strong> 검색 후 설치·실행</p></div></div>
-      <div class="step"><div class="step__tx"><b>새 노트북 생성</b><p>화면 하단 <strong>+ 새 만들기(New)</strong> 버튼으로 새 프로젝트 시작</p></div></div>
-      <div class="step"><div class="step__tx"><b>다양한 소스 추가</b><p>PDF · 이미지 · 웹사이트 · 유튜브 등 동화 제작에 필요한 자료 업로드</p></div></div>
-      <div class="step"><div class="step__tx"><b>핵심 소스 정제</b><p>추가한 자료 중 교재 제작에 실제로 사용할 핵심 소스만 선택</p></div></div>
-      <div class="step"><div class="step__tx"><b>구체적인 지시 입력</b><p>채팅창에 원하는 결과를 구체적으로 입력합니다.</p><p class="quote">“초등 2학년 곱셈 단원 슈퍼마리오 수학 동화 슬라이드 제작”</p></div></div>
-      <div class="step"><div class="step__tx"><b>스튜디오에서 최종 제작</b><p><strong>슬라이드(Slide)</strong> 기능으로 교재와 동화 완성</p></div></div>
-    </div>
-
-    <div class="sub rv">
-      <p class="sub__k">Guide</p>
-      <h3>안내판 &amp; 인포그래픽</h3>
-      <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 전체 화면으로 크게 볼 수 있습니다.</p>
-    </div>
-    <div class="posters rv">
-      <button class="poster" data-src="img/studio-overview.jpg" data-cap="수학&동화제작소 — 부스 전체 안내 배너" data-sfx="open">
-        <span class="poster__img"><img src="img/studio-overview.jpg" alt="수학&동화제작소 전체 안내 배너" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>제작소 안내 배너</b><span>테이블 2 전체 구성</span></span>
-      </button>
-      <button class="poster" data-src="img/studio-pc.jpg" data-cap="PC 버전 체험 — Step 1 소스 모으기 → Step 2 프롬프트 입력" data-sfx="open">
-        <span class="poster__img"><img src="img/studio-pc.jpg" alt="PC 버전 체험 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>PC 버전 체험</b><span>Step 1 → Step 2</span></span>
-      </button>
-      <button class="poster" data-src="img/studio-mobile.jpg" data-cap="스마트폰 버전 체험 — Gemini Notebook 6단계" data-sfx="open">
-        <span class="poster__img"><img src="img/studio-mobile.jpg" alt="스마트폰 버전 체험 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
-        <span class="poster__cap"><b>스마트폰 버전 체험</b><span>Gemini Notebook 6단계</span></span>
-      </button>
     </div>
   </div>
 </section>

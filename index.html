@@ -251,9 +251,12 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 .sub--first .sub__k{ text-transform:none; letter-spacing:.01em; font-size:12.5px }
 
 /* ============ Link cards ============ */
-.links{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)) }
+/* --cols 로 넓은 화면의 열 수를 섹션마다 지정. minmax(0,1fr)이라야 긴 URL이 열 폭을 밀지 않음 */
+.links{ display:grid; gap:12px; grid-template-columns:minmax(0,1fr) }
+@media (min-width:560px){ .links{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+@media (min-width:1000px){ .links{ grid-template-columns:repeat(var(--cols,2),minmax(0,1fr)) } }
 .link{
-  display:flex; align-items:center; gap:14px; padding:16px 18px;
+  display:flex; align-items:center; gap:14px; padding:16px 18px; min-width:0;
   background:var(--card-solid); border:1px solid var(--sep); border-radius:18px;
   box-shadow:var(--shadow);
   transition:transform .22s var(--ease), box-shadow .3s var(--ease), border-color .3s;
@@ -268,14 +271,20 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 .t2 .link__ico{ background:linear-gradient(140deg, color-mix(in srgb,var(--t2a) 18%,transparent), color-mix(in srgb,var(--t2b) 22%,transparent)) }
 .link__tx{ min-width:0; flex:1 1 auto }
 .link__tx b{ display:block; font-size:16px; font-weight:620; letter-spacing:-.018em }
+.link__tx b em{ font-style:normal; font-weight:520; color:var(--txt-3); font-size:13.5px; margin-left:3px; white-space:nowrap }
 .link__tx span{ display:block; font-size:12.5px; color:var(--txt-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px }
 .link__arw{ flex:0 0 auto; color:var(--txt-3); font-size:15px; transition:transform .25s var(--ease) }
 .link:hover .link__arw{ transform:translateX(3px) }
 .link--video .link__ico{ background:linear-gradient(140deg,#ff5f57,#ff375f); color:#fff }
+/* 영상 버튼은 한 줄 전체를 차지 */
+.link--wide{ grid-column:1 / -1; padding:18px 20px }
+.link--wide .link__ico{ width:48px; height:48px; border-radius:15px; font-size:22px }
+.link--wide .link__tx b{ font-size:17px }
 
 /* ============ Posters ============ */
-.posters{ display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)) }
-@media (max-width:600px){ .posters{ grid-template-columns:repeat(2,1fr); gap:11px } }
+.posters{ display:grid; gap:11px; grid-template-columns:repeat(2,minmax(0,1fr)) }
+@media (min-width:640px){ .posters{ gap:14px; grid-template-columns:repeat(3,minmax(0,1fr)) } }
+@media (min-width:1000px){ .posters{ grid-template-columns:repeat(var(--cols,3),minmax(0,1fr)) } }
 .poster{
   border-radius:18px; overflow:hidden; background:var(--card-solid);
   border:1px solid var(--sep); box-shadow:var(--shadow); text-align:left; width:100%;
@@ -516,7 +525,7 @@ body.lock{ overflow:hidden }
       <h3>활동 한눈에</h3>
       <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 안내판을 전체 화면으로 볼 수 있습니다.</p>
     </div>
-    <div class="posters rv">
+    <div class="posters rv" style="--cols:5">
       <button class="poster" data-src="img/zone-overview.jpg" data-cap="수학&코딩체험존 — 부스 전체 안내" data-sfx="open">
         <span class="poster__img"><img src="img/zone-overview.jpg" alt="수학&코딩체험존 전체 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
         <span class="poster__cap"><b>체험존 전체 안내</b><span>바이브코딩 · 제미나이 캔버스</span></span>
@@ -543,28 +552,28 @@ body.lock{ overflow:hidden }
       <p class="sub__k">Play now</p>
       <h3>바로 체험하기</h3>
     </div>
-    <div class="links rv">
+    <div class="links rv" style="--cols:4">
       <a class="link" href="https://Suda11.netlify.app" target="_blank" rel="noopener" data-sfx="link">
         <span class="link__ico">🎮</span>
-        <span class="link__tx"><b>수다방 놀이</b><span>Suda11.netlify.app</span></span>
-        <span class="link__arw">↗</span>
-      </a>
-      <a class="link" href="https://math-game-186.pages.dev/semester1/" target="_blank" rel="noopener" data-sfx="link">
-        <span class="link__ico">🎲</span>
-        <span class="link__tx"><b>수학놀이(5학년 1학기)</b><span>math-game-186.pages.dev</span></span>
-        <span class="link__arw">↗</span>
-      </a>
-      <a class="link" href="https://math-sns.vercel.app/" target="_blank" rel="noopener" data-sfx="link">
-        <span class="link__ico">💬</span>
-        <span class="link__tx"><b>수학 웹앱 SNS</b><span>단축주소 muz.so/mathsns</span></span>
+        <span class="link__tx"><b>수다방 놀이<em>(전학년)</em></b><span>Suda11.netlify.app</span></span>
         <span class="link__arw">↗</span>
       </a>
       <a class="link" href="https://motion-math-olympics.vercel.app/" target="_blank" rel="noopener" data-sfx="link">
         <span class="link__ico">🏆</span>
-        <span class="link__tx"><b>수학 올림픽</b><span>motion-math-olympics.vercel.app</span></span>
+        <span class="link__tx"><b>수학 올림픽<em>(2학년 2학기)</em></b><span>motion-math-olympics.vercel.app</span></span>
         <span class="link__arw">↗</span>
       </a>
-      <a class="link link--video" href="https://www.youtube.com/watch?v=5dc-b1eIc68" target="_blank" rel="noopener" data-sfx="link">
+      <a class="link" href="https://math-game-186.pages.dev/semester1/" target="_blank" rel="noopener" data-sfx="link">
+        <span class="link__ico">🎲</span>
+        <span class="link__tx"><b>수학놀이<em>(5학년 1학기)</em></b><span>math-game-186.pages.dev</span></span>
+        <span class="link__arw">↗</span>
+      </a>
+      <a class="link" href="https://math-sns.vercel.app/" target="_blank" rel="noopener" data-sfx="link">
+        <span class="link__ico">💬</span>
+        <span class="link__tx"><b>수학 웹앱 SNS<em>(교사용)</em></b><span>단축주소 muz.so/mathsns</span></span>
+        <span class="link__arw">↗</span>
+      </a>
+      <a class="link link--video link--wide" href="https://www.youtube.com/watch?v=5dc-b1eIc68" target="_blank" rel="noopener" data-sfx="link">
         <span class="link__ico">▶</span>
         <span class="link__tx"><b>바이브코딩 수학놀이 안내 영상</b><span>YouTube · 모니터 상영본</span></span>
         <span class="link__arw">↗</span>
@@ -585,7 +594,7 @@ body.lock{ overflow:hidden }
       <h3>활동 한눈에</h3>
       <p class="muted" style="font-size:15px;margin:4px 0 0">탭하면 안내판을 전체 화면으로 볼 수 있습니다.</p>
     </div>
-    <div class="posters rv">
+    <div class="posters rv" style="--cols:3">
       <button class="poster" data-src="img/studio-overview.jpg" data-cap="수학&동화제작소 — 부스 전체 안내" data-sfx="open">
         <span class="poster__img"><img src="img/studio-overview.jpg" alt="수학&동화제작소 전체 안내" loading="lazy"><span class="poster__zoom">⤢</span></span>
         <span class="poster__cap"><b>제작소 전체 안내</b><span>수학 동화 만들기 4단계</span></span>

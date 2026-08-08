@@ -226,23 +226,33 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 }
 @media (max-width:720px){ .flow__arrow{ width:100%; text-align:center; transform:rotate(90deg); padding:2px 0 } }
 
-/* ============ Table section header (배너를 배경으로 깔기) ============ */
-.tbl{ padding-top:0 }
-.tbl__hd{ position:relative; overflow:hidden; margin-bottom:clamp(6px,1.6vw,18px) }
-.tbl__hd img{ width:100%; height:auto; display:block }
-@media (min-width:820px){
-  .tbl__hd{ height:min(40vh,330px) }
-  .tbl__hd img{ height:100%; object-fit:cover; object-position:center 46% }
+/* ============ 섹션 배경으로 깔리는 배너 ============ */
+.tbl{ position:relative; isolation:isolate; padding-top:0 }
+/* 원본이 1600px이라 1400px에서 멈추면 확대되지 않고 항상 선명 */
+.tbl__bg{
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:min(100%,1400px); aspect-ratio:16/9;
+  z-index:-1; pointer-events:none; user-select:none;
 }
-/* 아래쪽을 페이지 배경으로 녹여 배너가 '깔린' 느낌 */
-.tbl__hd::after{
-  content:""; position:absolute; inset:0; pointer-events:none;
+.tbl__bg img{ width:100%; height:100%; object-fit:cover; object-position:center top }
+/* 아래로 갈수록 페이지 배경에 녹아들어, 본문이 그 위로 흐름 */
+.tbl__bg::after{
+  content:""; position:absolute; inset:0;
   background:linear-gradient(to bottom,
-    transparent 52%,
-    color-mix(in srgb, var(--bg) 55%, transparent) 78%,
-    color-mix(in srgb, var(--bg) 92%, transparent) 93%,
-    var(--bg) 100%);
+    transparent 26%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 48%,
+    color-mix(in srgb, var(--bg) 92%, transparent) 62%,
+    var(--bg) 72%);
 }
+/* 1400px보다 넓으면 좌우도 페이드시켜 떠 있는 상자로 보이지 않게 */
+@media (min-width:1401px){
+  .tbl__bg{
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 91%,transparent 100%);
+            mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 91%,transparent 100%);
+  }
+}
+/* 스크림이 완전히 덮이는 지점(배너 높이의 74%)부터 본문 시작 */
+.tbl > .wrap{ padding-top:calc(min(100vw,1400px) * 0.5625 * 0.74) }
 .sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
 
 .sub{ margin:clamp(30px,4.4vw,48px) 0 16px }
@@ -515,10 +525,10 @@ body.lock{ overflow:hidden }
 
 <!-- ══════════ 테이블 1 ══════════ -->
 <section class="sec tbl t1" id="table1">
-  <div class="tbl__hd">
-    <img src="img/hero-table1.jpg" alt="수학&코딩체험존 — #바이브코딩 #제미나이 캔버스 #수학올림픽" loading="lazy" width="1600" height="900">
-    <h2 class="sr">수학&amp;코딩체험존</h2>
+  <div class="tbl__bg" aria-hidden="true">
+    <img src="img/hero-table1.jpg" alt="" loading="lazy" width="1600" height="900">
   </div>
+  <h2 class="sr">수학&amp;코딩체험존 — #바이브코딩 #제미나이 캔버스 #수학올림픽</h2>
   <div class="wrap">
     <div class="sub sub--first rv">
       <p class="sub__k">Table 1 · 수학&amp;코딩체험존</p>
@@ -584,10 +594,10 @@ body.lock{ overflow:hidden }
 
 <!-- ══════════ 테이블 2 ══════════ -->
 <section class="sec tbl t2" id="table2">
-  <div class="tbl__hd">
-    <img src="img/hero-table2.jpg" alt="수학&동화제작소 — #수학동화 #제미나이 노트북 #캐릭터 생성" loading="lazy" width="1600" height="900">
-    <h2 class="sr">수학&amp;동화제작소</h2>
+  <div class="tbl__bg" aria-hidden="true">
+    <img src="img/hero-table2.jpg" alt="" loading="lazy" width="1600" height="900">
   </div>
+  <h2 class="sr">수학&amp;동화제작소 — #수학동화 #제미나이 노트북 #캐릭터 생성</h2>
   <div class="wrap">
     <div class="sub sub--first rv">
       <p class="sub__k">Table 2 · 수학&amp;동화제작소</p>

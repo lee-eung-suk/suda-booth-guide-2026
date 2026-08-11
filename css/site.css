@@ -282,7 +282,9 @@ h4{ margin:0 0 4px; font-size:16px; font-weight:640; letter-spacing:-.018em }
 .link__tx{ min-width:0; flex:1 1 auto }
 .link__tx b{ display:block; font-size:18.5px; font-weight:780; letter-spacing:-.02em }
 .link__tx b em{ font-style:normal; font-weight:560; color:var(--txt-3); font-size:14px; margin-left:3px; white-space:nowrap }
-.link__tx span{ display:block; font-size:13.5px; color:var(--txt-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px }
+/* :not(.pills) — .pills도 span이라 이 규칙에 걸려 display:flex가 깨지면서
+   학년별 pill이 한 줄로 뭉개지는 버그가 있었음(specificity가 .pills보다 높았음) */
+.link__tx span:not(.pills){ display:block; font-size:13.5px; color:var(--txt-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px }
 .link__arw{ flex:0 0 auto; color:var(--txt-3); font-size:17px; font-weight:800; transition:transform .25s var(--ease) }
 .link:hover .link__arw{ transform:translateX(4px) }
 .link--video .link__ico{ background:linear-gradient(140deg,#ff5f57,#ff375f); color:#fff; border-color:#b7261f; box-shadow:0 2px 0 #b7261f inset }
